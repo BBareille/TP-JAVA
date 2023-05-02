@@ -163,9 +163,8 @@ public class Training extends DAL<Training> {
             query.append("("+this.id +","+ former.getId()+")");
         }
         String sql = "INSERT INTO training_former (training_id, former_id) VALUES "+ query;
-
         PreparedStatement statement = this.connection.getConnection().prepareStatement(sql);
-
+        statement.executeUpdate();
         System.out.println(statement);
     }
 
