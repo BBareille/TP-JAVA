@@ -1,8 +1,12 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.*;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class SqlConnection {
 
@@ -30,5 +34,18 @@ public class SqlConnection {
 
     public Connection getConnection() {
         return connection;
+    }
+
+    public Consumer initDatabase() throws IOException, SQLException {
+
+        Statement statement = connection.createStatement();
+        Path sqlScriptPath = Paths.get("C:\\Users\\bapti\\IdeaProjects\\TP-JAVA\\database.sql");
+        List<String> sqlScript = Files.readAllLines(sqlScriptPath);
+        for(String script: sqlScript) {
+            Integer success =  statement.executeUpdate(script);
+            System.out.println("Query: " + script);
+        }
+        System.out.println("Base initialiser");
+        return null;
     }
 }
