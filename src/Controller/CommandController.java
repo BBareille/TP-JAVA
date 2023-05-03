@@ -124,6 +124,45 @@ public class CommandController {
             }
         }));
 
+        if(obj.getClass().getSimpleName().equals("Training")){
+            commandList.add(new Command(6, "6. Ajouter un(e) Formateur(ice)", c -> {
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("ID de votre formation cible : ");
+                Integer id_training = scanner.nextInt();
+                try {
+                    if(obj.findOne(id_training) == null){
+                        System.out.println("Cette entité n'existe pas");
+                    } else {
+                        Training training = (Training) obj.findOne(id_training);
+                        System.out.println("La formation séléctionné : "+training);
+                        Long former_id = scanner.nextLong();
+                        training.attachFormer(former_id);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
+            }));
+            commandList.add(new Command(7, "7. Ajouter un(e) Stagiaire", c -> {
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("ID de votre formation cible : ");
+                Integer id_training = scanner.nextInt();
+                try {
+                    if(obj.findOne(id_training) == null){
+                        System.out.println("Cette entité n'existe pas");
+                    } else {
+                        Training training = (Training) obj.findOne(id_training);
+                        System.out.println("La formation séléctionné : "+training);
+                        Long trainee_id = scanner.nextLong();
+                        training.attachTrainee(trainee_id);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }));
+        }
+
+
         console.setCommandList(commandList, false);
 
 
@@ -215,7 +254,6 @@ public class CommandController {
         } else
             return model.findOne(id).toString();
     }
-
     private static String add(DAL model) throws SQLException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         Class<?> modelClass = model.getClass();
         Scanner scanner = new Scanner(System.in);
@@ -283,10 +321,6 @@ public class CommandController {
                 }
             return "Succès";
         }else return null;
-
-
-
-
     }
 
     private static String delete(DAL model) throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {

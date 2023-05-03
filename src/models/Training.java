@@ -157,14 +157,19 @@ public class Training extends DAL<Training> {
         return formers;
     }
 
-    public void attachFormer(List<Former> formers) throws SQLException {
+    public void attachFormer(Long former_id) throws SQLException {
         StringBuilder query = new StringBuilder();
-        for (Former former: formers){
-            query.append("("+this.id +","+ former.getId()+")");
-        }
+        query.append("("+this.id +","+ former_id+")");
         String sql = "INSERT INTO training_former (training_id, former_id) VALUES "+ query;
         PreparedStatement statement = this.connection.getConnection().prepareStatement(sql);
         statement.executeUpdate();
     }
 
+    public void attachTrainee(Long traineeId) throws SQLException {
+        StringBuilder query = new StringBuilder();
+        query.append("("+this.id +","+ traineeId+")");
+        String sql = "INSERT INTO training_trainee (training_id, trainee_id) VALUES "+ query;
+        PreparedStatement statement = this.connection.getConnection().prepareStatement(sql);
+        statement.executeUpdate();
+    }
 }
