@@ -3,6 +3,8 @@ package models;
 import DAL.DAL;
 import database.SqlConnection;
 
+import java.sql.Connection;
+
 
 public class Trainee extends DAL<Trainee> {
 
@@ -30,8 +32,9 @@ public class Trainee extends DAL<Trainee> {
         super(connection);
     }
 
+
     @Override
-    protected void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
