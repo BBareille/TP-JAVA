@@ -1,10 +1,12 @@
 package server.route;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import database.SqlConnection;
 import models.Trainee;
+import models.adapter.TraineeAdapter;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -72,10 +74,12 @@ public class TraineeRoute implements HttpHandler {
         connection.connect();
         Trainee trainee = new Trainee(connection);
         try {
-            List<Trainee> traineeList = trainee.findAll();
-            //6System.out.println(traineeList);
-            String response = new Gson().toJson(traineeList);
-           // System.out.println("efiknefjbegbje" + response);
+            Trainee traineeList = trainee.findOne(1);
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(Trainee.class, new TraineeAdapter());
+            builder.setPrettyPrinting();
+            Gson gson = builder.create();
+            String response = gson.toJson(traineeList);
             exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
             exchange.getResponseHeaders().add("Connection", "close");
             exchange.sendResponseHeaders(200, response.getBytes().length);

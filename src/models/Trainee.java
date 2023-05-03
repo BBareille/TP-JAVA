@@ -8,6 +8,23 @@ public class Trainee extends DAL<Trainee> {
 
     String firstName;
     String lastName;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     Long id;
     public Trainee(SqlConnection connection) {
         super(connection);
