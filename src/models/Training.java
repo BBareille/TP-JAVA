@@ -17,8 +17,8 @@ public class Training extends DAL<Training> {
     private Date start_at;
     private Integer duration;
     private Integer price;
-    private long category_id;
-    private long level_id;
+    private Long category_id;
+    private Long level_id;
     private boolean online;
     public Training(SqlConnection connection) {
         super(connection);
@@ -109,7 +109,7 @@ public class Training extends DAL<Training> {
     }
 
     @Override
-    protected Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -157,7 +157,7 @@ public class Training extends DAL<Training> {
         return formers;
     }
 
-    public void attachFormer(ArrayList<Former> formers) throws SQLException {
+    public void attachFormer(List<Former> formers) throws SQLException {
         StringBuilder query = new StringBuilder();
         for (Former former: formers){
             query.append("("+this.id +","+ former.getId()+")");
@@ -165,7 +165,6 @@ public class Training extends DAL<Training> {
         String sql = "INSERT INTO training_former (training_id, former_id) VALUES "+ query;
         PreparedStatement statement = this.connection.getConnection().prepareStatement(sql);
         statement.executeUpdate();
-        System.out.println(statement);
     }
 
 }

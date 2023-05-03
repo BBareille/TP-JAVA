@@ -4,6 +4,8 @@ import DAL.DAL;
 import database.SqlConnection;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
@@ -38,12 +40,17 @@ public class Former extends DAL<Former> {
         this.lastName = lastName;
     }
 
+//    public void getFormationList(){
+
+//    }
+
     @Override
     public String toString() {
         return "Former{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", formation='" + lastName + '\'' +
                 '}';
     }
 }

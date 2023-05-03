@@ -1,8 +1,6 @@
 package DAL;
 
 import database.SqlConnection;
-import models.Training;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.PreparedStatement;
@@ -18,7 +16,6 @@ public abstract class DAL<T extends DAL<T>> implements IDAL<T> {
     public DAL(SqlConnection connection) {
         this.connection = connection;
     }
-
     @Override
     public List<T> findAll() throws SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
@@ -29,6 +26,7 @@ public abstract class DAL<T extends DAL<T>> implements IDAL<T> {
         String sql = "SELECT * FROM "+ model.getSimpleName();
         PreparedStatement statement = this.connection.getConnection().prepareStatement(sql);
         ResultSet rs = statement.executeQuery();
+
         while (rs.next()){
             Object obj = model.getConstructor(SqlConnection.class).newInstance(this.connection);
 
@@ -63,7 +61,6 @@ public abstract class DAL<T extends DAL<T>> implements IDAL<T> {
                 attribute.setAccessible(true);
                 attribute.set(obj, rs.getObject(attribute.getName()));
             }
-            System.out.println(obj);
         }
 
         statement.close();
@@ -160,13 +157,14 @@ public abstract class DAL<T extends DAL<T>> implements IDAL<T> {
         String sql = "DELETE FROM "+ this.getClass().getSimpleName()+ " WHERE id=?";
         PreparedStatement statement = connection.getConnection().prepareStatement(sql);
         statement.setLong(1, id);
-        statement.execute();
+        System.out.println(statement);
+        statement.executeUpdate();
 
         statement.close();
 
     }
 
     protected abstract void setId(Long id);
-    protected abstract Long getId();
+    public abstract Long getId();
 
 }

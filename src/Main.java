@@ -1,12 +1,5 @@
-import DAL.IDAL;
+import Console.Console;
 import database.SqlConnection;
-import models.Category;
-import models.Former;
-import models.Level;
-import models.Training;
-
-import java.util.Date;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
@@ -14,11 +7,11 @@ public class Main {
         try {
             connection.connect();
 
-
+//
 //            Category category = new Category(connection);
 //            category.setName("Développement");
 //            category.create(category);
-
+//
 //            Level level = new Level(connection);
 //            level.setName("Medium");
 //            level.create(level);
@@ -33,12 +26,17 @@ public class Main {
 //            training.setOnline(true);
 //            training.setLevel(level.getId());
 
-//            Former forme = new Former();
-////            training.attachFormer();
+//            Former former = new Former();
+//            former.setFirstName("Michel");
+//            former.setLastName("Obama");
+//            former.create(former);
+//            ArrayList<Former> formers = new ArrayList<>();
+//            formers.add(former);
+//            training.attachFormer(formers);
 //            System.out.println(training.create(training));
 
            Console console = new Console();
-           console.mainMenu();
+           console.run();
 
         }catch (Exception e){
             e.printStackTrace();
