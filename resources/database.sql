@@ -41,15 +41,15 @@ CREATE TABLE IF NOT EXISTS training_trainee(
     training_id INTEGER UNSIGNED,
     trainee_id INTEGER UNSIGNED,
     PRIMARY KEY (training_id, trainee_id),
-    FOREIGN KEY (training_id) REFERENCES training(id),
-    FOREIGN KEY (trainee_id) REFERENCES trainee(id)
+    FOREIGN KEY (training_id) REFERENCES training(id) ON DELETE CASCADE,
+    FOREIGN KEY (trainee_id) REFERENCES trainee(id) ON DELETE CASCADE
                                            );
 CREATE TABLE training_former(
     training_id INTEGER UNSIGNED,
     former_id INTEGER UNSIGNED,
     PRIMARY KEY (training_id, former_id),
-    FOREIGN KEY (training_id) REFERENCES training(id),
-    FOREIGN KEY (former_id) REFERENCES former(id));
+    FOREIGN KEY (training_id) REFERENCES training(id) ON DELETE CASCADE,
+    FOREIGN KEY (former_id) REFERENCES former(id) ON DELETE CASCADE) ;
 
 INSERT INTO trainee (firstName, lastName) VALUES ('Edgard', 'Edwards');
 INSERT INTO trainee (firstName, lastName) VALUES ('Curtis', 'Pena');

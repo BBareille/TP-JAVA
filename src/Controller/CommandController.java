@@ -8,6 +8,7 @@ import models.Category;
 import models.Former;
 import models.Trainee;
 import models.Training;
+import server.Server;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -18,70 +19,9 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class CommandController {
-
-    public static void subMenuTrainee() throws SQLException {
-        Console console = Console.getInstance();
-        SqlConnection connection = new SqlConnection();
-        connection.connect();
-        Trainee trainee = new Trainee(connection);
-        List<Command> traineeCommandList = new ArrayList<Command>();
-
-
-        Command command1 = new Command<>(1, "1. Voir tous les stagiaires", c -> {
-            try {
-                System.out.println(findAll(trainee));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-
-        traineeCommandList.add(command1);
-        Command command2 = new Command<>(2, "2. Voir un stagiaire", c -> {
-            try {
-                System.out.println(findOne(trainee));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        traineeCommandList.add(command2);
-
-
-        Command command3 = new Command<>(3, "3. Ajouter un stagiaire", c -> {
-            try {
-                System.out.println(add(trainee));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        traineeCommandList.add(command3);
-        Command command4 = new Command<>(4, "4. Modifier un stagiaire", c -> {
-            try {
-                System.out.println(update(trainee));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-        });
-        traineeCommandList.add(command4);
-        Command command5 = new Command<>(5, "5. Supprimer un stagiaire", c -> {
-            try {
-                System.out.println(delete(trainee));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-        traineeCommandList.add(command5);
-
-        console.setCommandList(traineeCommandList, false);
-    }
-
     public static void subMenu(DAL obj, String menuName) throws SQLException, NoSuchMethodException {
         Console console = Console.getInstance();
         SqlConnection connection = new SqlConnection();
@@ -222,6 +162,14 @@ public class CommandController {
         });
         commandList.add(command5);
 
+        commandList.add(new Command(6, "6. Démarrer serveur API", c -> {
+            try {
+                Server.startServer();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }));
+
         console.setCommandList(commandList, true);
     }
 
@@ -248,11 +196,15 @@ public class CommandController {
     private static String findOne(DAL model) throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("ID de votre cible : ");
-        Integer id = scanner.nextInt();
-        if(model.findOne(id) == null){
-            return "Cette entité n'existe pas";
-        } else
-            return model.findOne(id).toString();
+        try {
+            Integer id = Integer.valueOf(scanner.next());
+            if (model.findOne(id) == null) {
+                return "Cette entité n'existe pas";
+            } else
+                return model.findOne(id).toString();
+        }catch (Exception e) {
+            return "Veuillez entrez un nombre";
+        }
     }
     private static String add(DAL model) throws SQLException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException {
         Class<?> modelClass = model.getClass();
@@ -269,15 +221,34 @@ public class CommandController {
 
                 String t = scanner.next();
                 if(type.equals(Date.class)){
-                    Date d = Date.from(LocalDate.parse(t).atStartOfDay().toInstant(ZoneOffset.UTC));
-                    attribute.set(obj, d);
+                    try {
+                        Date d = Date.from(LocalDate.parse(t).atStartOfDay().toInstant(ZoneOffset.UTC));
+                        attribute.set(obj, d);
+                    } catch (Exception e){
+                        return "Veuillez entrez une date correcte";
+                    }
                 }else if(type.equals(Integer.class) || type.equals(int.class)){
-                    attribute.set(obj, Integer.parseInt(t));
+                    try{
+                        attribute.set(obj, Integer.parseInt(t));
+                    } catch (Exception e){
+                        return "Veuillez entrez une nombre correcte";
+                    }
+
                 } else if (type.equals(Long.class) || type.equals(long.class)) {
-                    attribute.set(obj, Long.parseLong(t));
+                    try {
+                        attribute.set(obj, Long.parseLong(t));
+                    }catch (Exception e){
+                        return "Veuillez entrez une nombre correcte";
+                    }
                 } else if (type.equals(Boolean.class) || type.equals(boolean.class)) {
-                    attribute.set(obj, Boolean.parseBoolean(t));
+                    try {
+                        Boolean b = Boolean.parseBoolean(t);
+                        attribute.set(obj, b);
+                    }catch (Exception e){
+                        return "Veuillez entrez un booléen correcte (true/ false)";
+                    }
                 } else{
+                    if(t == null) return "Saisie incorrecte";
                     attribute.set(obj, t);
                 }
             }
@@ -305,15 +276,34 @@ public class CommandController {
 
                     String t = scanner.next();
                     if(type.equals(Date.class)){
-                        Date d = Date.from(LocalDate.parse(t).atStartOfDay().toInstant(ZoneOffset.UTC));
-                        attribute.set(modelToModify, d);
+                        try {
+                            Date d = Date.from(LocalDate.parse(t).atStartOfDay().toInstant(ZoneOffset.UTC));
+                            attribute.set(modelToModify, d);
+                        } catch (Exception e){
+                            return "Veuillez entrez une date correcte";
+                        }
                     }else if(type.equals(Integer.class) || type.equals(int.class)){
-                        attribute.set(modelToModify, Integer.parseInt(t));
+                        try{
+                            attribute.set(modelToModify, Integer.parseInt(t));
+                        } catch (Exception e){
+                            return "Veuillez entrez une nombre correcte";
+                        }
+
                     } else if (type.equals(Long.class) || type.equals(long.class)) {
-                        attribute.set(modelToModify, Long.parseLong(t));
+                        try {
+                            attribute.set(modelToModify, Long.parseLong(t));
+                        }catch (Exception e){
+                            return "Veuillez entrez une nombre correcte";
+                        }
                     } else if (type.equals(Boolean.class) || type.equals(boolean.class)) {
-                        attribute.set(modelToModify, Boolean.parseBoolean(t));
+                        try {
+                            Boolean b = Boolean.parseBoolean(t);
+                            attribute.set(modelToModify, b);
+                        }catch (Exception e){
+                            return "Veuillez entrez un booléen correcte (true/ false)";
+                        }
                     } else{
+                        if(t == null) return "Saisie incorrecte";
                         attribute.set(modelToModify, t);
                     }
                 }
@@ -326,10 +316,18 @@ public class CommandController {
     private static String delete(DAL model) throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("L'id de l'entité à supprimer");
-        Long id = scanner.nextLong();
-        DAL modelToDelete = model.findOne(id);
-        System.out.println("Entité que vous voulez supprimer : " + modelToDelete);
-        System.out.println("Êtes-vous sûr de supprimer ? Y/N");
+        Long id;
+        try{
+            id = scanner.nextLong();
+            DAL modelToDelete = model.findOne(id);
+            System.out.println("Entité que vous voulez supprimer : " + modelToDelete);
+            System.out.println("Êtes-vous sûr de supprimer ? Y/N");
+        }catch (Exception e) {
+            return "Entrez un id correcte";
+        }
+
+
+
         String deleteConfirm = scanner.next();
         if(deleteConfirm.equals("Y")){
             model.delete(id);
