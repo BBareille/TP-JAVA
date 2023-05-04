@@ -66,47 +66,47 @@ public class TraineeRoute implements HttpHandler {
         }
     }
     void getAll(HttpExchange exchange) throws SQLException {
-        SqlConnection connection = new SqlConnection();
-        connection.connect();
-        Trainee trainee = new Trainee(connection);
-        try {
-            List<Trainee> traineeList = trainee.findAll();
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Trainee.class, new TraineeAdapter());
-            builder.setPrettyPrinting();
-            Gson gson = builder.create();
-            String response = gson.toJson(traineeList);
-            exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
-            exchange.getResponseHeaders().add("Connection", "close");
-            exchange.sendResponseHeaders(200, response.getBytes().length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        SqlConnection connection = new SqlConnection();
+//        connection.connect();
+//        Trainee trainee = new Trainee(connection);
+//        try {
+//            List<Trainee> traineeList = trainee.findAll();
+//            GsonBuilder builder = new GsonBuilder();
+//            builder.registerTypeAdapter(Trainee.class, new TraineeAdapter());
+//            builder.setPrettyPrinting();
+//            Gson gson = builder.create();
+//            String response = gson.toJson(traineeList);
+//            exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
+//            exchange.getResponseHeaders().add("Connection", "close");
+//            exchange.sendResponseHeaders(200, response.getBytes().length);
+//            OutputStream os = exchange.getResponseBody();
+//            os.write(response.getBytes());
+//            os.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     void getOne(HttpExchange exchange, Integer id) throws SQLException {
-        SqlConnection connection = new SqlConnection();
-        connection.connect();
-        Trainee trainee = new Trainee(connection);
-        try {
-            Trainee traineeList = trainee.findOne(id);
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(Trainee.class, new TraineeAdapter());
-            builder.setPrettyPrinting();
-            Gson gson = builder.create();
-            String response = gson.toJson(traineeList);
-            exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
-            exchange.getResponseHeaders().add("Connection", "close");
-            exchange.sendResponseHeaders(200, response.getBytes().length);
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        SqlConnection connection = new SqlConnection();
+//        connection.connect();
+//        Trainee trainee = new Trainee(connection);
+//        try {
+////            Trainee traineeList = trainee.findOne(id);
+//            GsonBuilder builder = new GsonBuilder();
+//            builder.registerTypeAdapter(Trainee.class, new TraineeAdapter());
+//            builder.setPrettyPrinting();
+//            Gson gson = builder.create();
+//            String response = gson.toJson(traineeList);
+//            exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
+//            exchange.getResponseHeaders().add("Connection", "close");
+//            exchange.sendResponseHeaders(200, response.getBytes().length);
+//            OutputStream os = exchange.getResponseBody();
+//            os.write(response.getBytes());
+//            os.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     void post(HttpExchange exchange) throws IOException, SQLException, IllegalAccessException {

@@ -9,16 +9,16 @@ import database.SqlConnection;
 public class ManageMenu extends Command {
 
     private CommandController commandController;
-    public ManageMenu(Integer id, String displayName, SqlConnection connection, DAL model) {
+    public ManageMenu(Integer id, String displayName, SqlConnection connection, DAL model, CommandController commandController) {
         super(id, displayName, connection, model);
-        this.commandController = CommandController.getInstance();
+        this.commandController = commandController;
     }
 
 
     @Override
     public Object apply(Object o) {
             try {
-                this.commandController.subMenu(model, model.toString());
+                commandController.subMenu(model, model.getClass().getSimpleName());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

@@ -1,10 +1,11 @@
 package Commands;
 
 import Console.Command;
+import Controller.CommandController;
 import DAL.DAL;
 import database.SqlConnection;
 
-import static Controller.CommandController.menu;
+import static Controller.CommandController.getInstance;
 
 public class BackToMainMenuCommand extends Command {
 
@@ -14,8 +15,9 @@ public class BackToMainMenuCommand extends Command {
 
     @Override
     public Object apply(Object o) {
+        CommandController commandController = getInstance();
         try {
-                    menu();
+                    commandController.menu();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

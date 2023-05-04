@@ -6,24 +6,25 @@ import database.SqlConnection;
 
 import java.util.Scanner;
 
-public class FindOneCommand extends Command<Object, String> {
+public class FindOneCommand extends Command<Object, Object> {
 
     public FindOneCommand(Integer id, String displayName, SqlConnection connection, DAL model) {
         super(id, displayName, connection, model);
     }
 
     @Override
-    public String apply(Object o) {
+    public Object apply(Object o) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("ID de votre cible : ");
         try {
             Integer id = Integer.valueOf(scanner.next());
             if (model.findOne(id) == null) {
-                return "Cette entité n'existe pas";
+                System.out.println("Cette entité n'existe pas");
             } else
-                return model.findOne(id).toString();
+                System.out.println(model.findOne(id).toString());
         }catch (Exception e) {
-            return "Veuillez entrez un nombre";
+            System.out.println("Veuillez entrez un nombre");
         }
+        return null;
     }
 }

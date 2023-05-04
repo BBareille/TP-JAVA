@@ -23,7 +23,8 @@ public class DeleteModelCommand extends Command {
             System.out.println("Entité que vous voulez supprimer : " + modelToDelete);
             System.out.println("Êtes-vous sûr de supprimer ? Y/N");
         }catch (Exception e) {
-            return "Entrez un id correcte";
+            System.out.println("Entrez un id correcte");
+            return e;
         }
 
 

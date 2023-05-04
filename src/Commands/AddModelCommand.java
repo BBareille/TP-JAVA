@@ -26,7 +26,6 @@ public class AddModelCommand extends Command<Object, String> {
         Class<?> modelClass = model.getClass();
         Scanner scanner = new Scanner(System.in);
         Field[] fields = model.getClass().getDeclaredFields();
-        SqlConnection connection = new SqlConnection();
         Object obj;
         try {
             obj = modelClass.getConstructor(SqlConnection.class).newInstance(connection);
@@ -52,27 +51,27 @@ public class AddModelCommand extends Command<Object, String> {
                         Date d = Date.from(LocalDate.parse(t).atStartOfDay().toInstant(ZoneOffset.UTC));
                         attribute.set(obj, d);
                     } catch (Exception e){
-                        return "Veuillez entrez une date correcte";
+                        System.out.println("Veuillez entrez une date correcte");
                     }
                 }else if(type.equals(Integer.class) || type.equals(int.class)){
                     try{
                         attribute.set(obj, Integer.parseInt(t));
                     } catch (Exception e){
-                        return "Veuillez entrez une nombre correcte";
+                        System.out.println("Veuillez entrez une nombre correcte");
                     }
 
                 } else if (type.equals(Long.class) || type.equals(long.class)) {
                     try {
                         attribute.set(obj, Long.parseLong(t));
                     }catch (Exception e){
-                        return "Veuillez entrez une nombre correcte";
+                        System.out.println("Veuillez entrez une nombre correcte");
                     }
                 } else if (type.equals(Boolean.class) || type.equals(boolean.class)) {
                     try {
                         Boolean b = Boolean.parseBoolean(t);
                         attribute.set(obj, b);
                     }catch (Exception e){
-                        return "Veuillez entrez un booléen correcte (true/ false)";
+                        System.out.println("Veuillez entrez un booléen correcte (true/ false)");
                     }
                 } else{
                     if(t == null) return "Saisie incorrecte";

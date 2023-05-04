@@ -7,7 +7,7 @@ public class Main {
         try {
             connection.connect();
 
-           Console console = new Console();
+           Console console = new Console(connection);
            console.run();
 
         }catch (Exception e){

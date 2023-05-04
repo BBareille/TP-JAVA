@@ -16,11 +16,6 @@ public class InitDatabaseCommand extends Command {
     @Override
     public Object apply(Object o) {
         try {
-            connection.connect();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try {
             connection.initDatabase();
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -25,43 +25,44 @@ public class TraineeAdapter extends TypeAdapter<Trainee> {
 
     @Override
     public Trainee read(JsonReader jsonReader) throws IOException {
-        SqlConnection connection = new SqlConnection();
-        try {
-            connection.connect();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        Trainee trainee = new Trainee(connection);
-        jsonReader.beginObject();
-        String fieldname = null;
-
-        while(jsonReader.hasNext()){
-            JsonToken token = jsonReader.peek();
-
-            if (token.equals(JsonToken.NAME)) {
-                //get the current token
-                fieldname = jsonReader.nextName();
-            }
-
-            if("id".equals(fieldname)){
-                token = jsonReader.peek();
-                trainee.setId(jsonReader.nextLong());
-            }
-
-            if("firstName".equals(fieldname)) {
-                token = jsonReader.peek();
-                trainee.setFirstName(jsonReader.nextString());
-            }
-
-            if("lastName".equals(fieldname)){
-                token = jsonReader.peek();
-                trainee.setLastName(jsonReader.nextString());
-            }
-
-
-
-        }
-        jsonReader.endObject();
+//        SqlConnection connection = new SqlConnection();
+//        try {
+//            connection.connect();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
+//        Trainee trainee = new Trainee(connection);
+//        jsonReader.beginObject();
+//        String fieldname = null;
+//
+//        while(jsonReader.hasNext()){
+//            JsonToken token = jsonReader.peek();
+//
+//            if (token.equals(JsonToken.NAME)) {
+//                //get the current token
+//                fieldname = jsonReader.nextName();
+//            }
+//
+//            if("id".equals(fieldname)){
+//                token = jsonReader.peek();
+//                trainee.setId(jsonReader.nextLong());
+//            }
+//
+//            if("firstName".equals(fieldname)) {
+//                token = jsonReader.peek();
+//                trainee.setFirstName(jsonReader.nextString());
+//            }
+//
+//            if("lastName".equals(fieldname)){
+//                token = jsonReader.peek();
+//                trainee.setLastName(jsonReader.nextString());
+//            }
+//
+//
+//
+//        }
+//        jsonReader.endObject();
+        Trainee trainee = null;
         return trainee;
     }
 }

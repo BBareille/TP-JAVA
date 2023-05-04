@@ -14,7 +14,7 @@ public class FindAllCommand extends Command<Object, String> {
     @Override
     public String apply(Object o) {
         try {
-            return model.findAll().toString();
+            System.out.println(model.findAll().toString());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -26,5 +26,6 @@ public class FindAllCommand extends Command<Object, String> {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 }

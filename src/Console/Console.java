@@ -3,13 +3,13 @@ package Console;
 import Commands.BackToMainMenuCommand;
 import Commands.QuitCommand;
 import Controller.CommandController;
+import database.SqlConnection;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Consumer;
-
-import static Controller.CommandController.menu;
 
 public class Console {
 
@@ -18,11 +18,15 @@ public class Console {
     Integer commandAsked;
     List<Command> commandList;
     boolean isRunning = false;
+    SqlConnection connection;
+    CommandController commandController;
     int nombre;
-    public Console(){
+    public Console(SqlConnection connection){
         this.scanner = new Scanner(System.in);
+        this.connection = connection;
         instance = this;
         this.commandList = new ArrayList<>();
+        this.commandController = new CommandController(connection);
     }
 
     public static Console getInstance(){
@@ -49,7 +53,7 @@ public class Console {
     }
 
     public void run() throws SQLException {
-        menu();
+        commandController.menu();
         isRunning = true;
         while (isRunning){
             show(commandList);
@@ -66,7 +70,7 @@ public class Console {
     public <T> void command(Consumer<T> command, T t, Integer n){
         System.out.println(t);
         if(n == commandAsked){
-            command.accept(t);
+                command.accept(t);
         }
 
     }
