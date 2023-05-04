@@ -34,8 +34,8 @@ public class CommandController {
         commandList.add(new DeleteModelCommand(5, "5. Supprimer un(e) "+ menuName, connection, model));
 
         if(model.getClass().getSimpleName().equals("Training")){
-            commandList.add(new AttachToTraining(6, "6. Ajouter un(e) Formateur(ice)", connection, model));
-            commandList.add(new AttachToTraining(7, "7. Ajouter un(e) Stagiaire", connection, model));
+            commandList.add(new AttachToTraining(6, "6. Ajouter un(e) Formateur(ice)", connection, model, new Former(connection)));
+            commandList.add(new AttachToTraining(7, "7. Ajouter un(e) Stagiaire", connection, model, new Trainee(connection)));
         }
         console.setCommandList(commandList, false);
         }
