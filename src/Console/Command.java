@@ -1,15 +1,23 @@
 package Console;
 
+import DAL.DAL;
+import database.SqlConnection;
+
 import java.util.function.Consumer;
+import java.util.function.Function;
 
-public class Command<T> {
-    Integer id;
-    String displayName;
-    Consumer<T> consumer;
+public abstract class Command<T, R> implements Function<T, R> {
 
-    public Command(Integer id, String displayName, Consumer<T> consumer){
+    protected Integer id;
+    protected String displayName;
+
+    protected SqlConnection connection;
+    protected DAL model;
+
+    public Command(Integer id, String displayName, SqlConnection connection, DAL model){
         this.id = id;
         this.displayName = displayName;
-        this.consumer = consumer;
+        this.connection = connection;
+        this.model = model;
     }
 }

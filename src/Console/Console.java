@@ -1,5 +1,7 @@
 package Console;
 
+import Commands.BackToMainMenuCommand;
+import Commands.QuitCommand;
 import Controller.CommandController;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,24 +38,13 @@ public class Console {
         this.commandAsked = n;
         for (Command command: commandList)
             if(command.id == n)
-                command.consumer.accept(n);
+                command.apply(null);
     }
     public void setCommandList(List<Command> commandList , boolean isMainMenu) {
         if (!isMainMenu) {
-            Command command8 = new Command(8, "8. Retourner au menu princpal", c -> {
-                try {
-                    menu();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            commandList.add(command8);
+            commandList.add(new BackToMainMenuCommand(8, "8. Retourner au menu principal", null, null));
         }
-
-        Command command9 = new Command(9, "9. Quitter", c -> {
-            CommandController.quit();
-        });
-        commandList.add(command9);
+        commandList.add(new QuitCommand(9, "9. Quitter", null, null));
         this.commandList = commandList;
     }
 
