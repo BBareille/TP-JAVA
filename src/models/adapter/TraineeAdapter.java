@@ -25,7 +25,8 @@ public class TraineeAdapter extends TypeAdapter<Trainee> {
 
     @Override
     public Trainee read(JsonReader jsonReader) throws IOException {
-//        SqlConnection connection = new SqlConnection();
+        SqlConnection connection = new SqlConnection();
+        return new Trainee(connection);
 //        try {
 //            connection.connect();
 //        } catch (SQLException e) {
@@ -62,7 +63,6 @@ public class TraineeAdapter extends TypeAdapter<Trainee> {
 //
 //        }
 //        jsonReader.endObject();
-        Trainee trainee = null;
-        return trainee;
+//        return trainee;
     }
 }

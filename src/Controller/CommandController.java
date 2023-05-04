@@ -15,7 +15,6 @@ import java.util.*;
 public class CommandController {
 
     private static CommandController instance;
-
     private SqlConnection connection;
     public CommandController(SqlConnection connection) {
         instance = this;

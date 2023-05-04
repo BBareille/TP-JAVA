@@ -15,7 +15,7 @@ public class StartAPIServerCommand extends Command {
     @Override
     public Object apply(Object o) {
         try {
-            Server.startServer();
+            new Server(connection).startServer();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
