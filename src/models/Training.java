@@ -6,9 +6,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Training extends DAL<Training> {
 
@@ -36,8 +39,9 @@ public class Training extends DAL<Training> {
         return start_at;
     }
 
-    public void setStart_at(Date start_at) {
-        this.start_at = start_at;
+    public void setStart_at(String start_at) throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        this.start_at = formatter.parse(start_at);
     }
 
     public Integer getDuration() {
@@ -104,7 +108,7 @@ public class Training extends DAL<Training> {
 
 
     @Override
-    protected void setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

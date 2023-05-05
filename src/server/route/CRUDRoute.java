@@ -10,8 +10,11 @@ import database.SqlConnection;
 import models.adapter.TraineeAdapter;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +25,6 @@ public abstract class CRUDRoute implements HttpHandler {
     DAL model;
     GsonBuilder builder;
     TypeAdapter modelAdapter;
-
     String route;
      public CRUDRoute(SqlConnection connection, String route){
         this.connection = connection;
@@ -55,19 +57,19 @@ public abstract class CRUDRoute implements HttpHandler {
 
             if(method.matches("GET")) {
                 try {
-//                    this.getOne(exchange, id);
+                    getOne(exchange, id);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             } else if (method.matches("PUT")) {
                 try {
-//                    this.update();
+                    update(exchange, id);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             } else if (method.matches("DELETE")) {
                 try {
-//                    this.delete();
+                    delete(exchange, id);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -93,7 +95,67 @@ public abstract class CRUDRoute implements HttpHandler {
             e.printStackTrace();
         }
     };
-    protected void post(HttpExchange exchange){
+    protected void post(HttpExchange exchange) throws IOException, SQLException, IllegalAccessException {
+        try{
+            InputStream body = exchange.getRequestBody();
+            String json = new String(body.readAllBytes(), StandardCharsets.UTF_8);
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(model.getClass(), modelAdapter)
+                    .create();
 
+            DAL newModel = gson.fromJson(json, model.getClass());
+            newModel.create(newModel);
+            String modelJson = gson.toJson(newModel);
+
+            exchange.sendResponseHeaders(200, modelJson.getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(modelJson.getBytes());
+            os.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+    protected void getOne(HttpExchange exchange, Integer id) throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, IOException {
+        DAL targetModel = model.findOne(id);
+        builder.registerTypeAdapter(model.getClass(), modelAdapter);
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        String response = gson.toJson(targetModel);
+        exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
+        exchange.getResponseHeaders().add("Connection", "close");
+        exchange.sendResponseHeaders(200, response.getBytes().length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
+    }
+    protected void update(HttpExchange exchange, Integer id) throws IOException, SQLException, IllegalAccessException {
+        InputStream body = exchange.getRequestBody();
+        String json = new String(body.readAllBytes(), StandardCharsets.UTF_8);
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(model.getClass(), modelAdapter)
+                .create();
+
+        DAL newModel = gson.fromJson(json, model.getClass());
+        newModel.update(newModel);
+        String modelJson = gson.toJson(newModel);
+
+        exchange.sendResponseHeaders(200, modelJson.getBytes().length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(modelJson.getBytes());
+        os.close();
+    }
+    protected void delete(HttpExchange exchange, Integer id) throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, IOException {
+        DAL targetModel = model.findOne(id);
+        model.delete(id);
+        builder.registerTypeAdapter(model.getClass(), modelAdapter);
+        builder.setPrettyPrinting();
+        Gson gson = builder.create();
+        String response = gson.toJson(targetModel);
+        exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
+        exchange.getResponseHeaders().add("Connection", "close");
+        exchange.sendResponseHeaders(200, response.getBytes().length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(response.getBytes());
+        os.close();
     }
 }

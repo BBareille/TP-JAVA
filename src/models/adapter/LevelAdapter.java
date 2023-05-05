@@ -5,32 +5,29 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import database.SqlConnection;
-import models.Trainee;
+import models.Level;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
-public class TraineeAdapter extends TypeAdapter<Trainee> {
+public class LevelAdapter extends TypeAdapter<Level> {
 
     SqlConnection connection;
-    public TraineeAdapter(SqlConnection connection){
+    public LevelAdapter(SqlConnection connection){
         this.connection = connection;
     }
     @Override
-    public void write(JsonWriter jsonWriter, Trainee trainee) throws IOException {
+    public void write(JsonWriter jsonWriter, Level level) throws IOException {
         jsonWriter.beginObject();
         jsonWriter.name("id");
-        jsonWriter.value(trainee.getId());
-        jsonWriter.name("firstName");
-        jsonWriter.value(trainee.getFirstName());
-        jsonWriter.name("lastName");
-        jsonWriter.value(trainee.getLastName());
+        jsonWriter.value(level.getId());
+        jsonWriter.name("name");
+        jsonWriter.value(level.getName());
         jsonWriter.endObject();
     }
 
     @Override
-    public Trainee read(JsonReader jsonReader) throws IOException {
-        Trainee trainee = new Trainee(connection);
+    public Level read(JsonReader jsonReader) throws IOException {
+        Level level = new Level(connection);
         jsonReader.beginObject();
         String fieldname = null;
 
@@ -44,23 +41,18 @@ public class TraineeAdapter extends TypeAdapter<Trainee> {
 
             if("id".equals(fieldname)){
                 token = jsonReader.peek();
-                trainee.setId(jsonReader.nextLong());
+                level.setId(jsonReader.nextLong());
             }
 
-            if("firstName".equals(fieldname)) {
+            if("name".equals(fieldname)) {
                 token = jsonReader.peek();
-                trainee.setFirstName(jsonReader.nextString());
-            }
-
-            if("lastName".equals(fieldname)){
-                token = jsonReader.peek();
-                trainee.setLastName(jsonReader.nextString());
+                level.setName(jsonReader.nextString());
             }
 
 
 
         }
         jsonReader.endObject();
-        return trainee;
+        return level;
     }
 }

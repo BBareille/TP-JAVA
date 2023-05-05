@@ -16,6 +16,6 @@ public class FormerRoute extends CRUDRoute{
     public FormerRoute(SqlConnection connection, String route) {
         super(connection, route);
         this.model = new Former(connection);
-        this.modelAdapter = new FormerAdapter();
+        this.modelAdapter = new FormerAdapter(connection);
     }
 }

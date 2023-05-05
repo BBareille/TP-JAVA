@@ -5,32 +5,29 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import database.SqlConnection;
-import models.Trainee;
+import models.Category;
+import models.Level;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
-public class TraineeAdapter extends TypeAdapter<Trainee> {
-
+public class CategoryAdapter extends TypeAdapter<Category> {
     SqlConnection connection;
-    public TraineeAdapter(SqlConnection connection){
+    public CategoryAdapter(SqlConnection connection){
         this.connection = connection;
     }
     @Override
-    public void write(JsonWriter jsonWriter, Trainee trainee) throws IOException {
+    public void write(JsonWriter jsonWriter, Category category) throws IOException {
         jsonWriter.beginObject();
         jsonWriter.name("id");
-        jsonWriter.value(trainee.getId());
-        jsonWriter.name("firstName");
-        jsonWriter.value(trainee.getFirstName());
-        jsonWriter.name("lastName");
-        jsonWriter.value(trainee.getLastName());
+        jsonWriter.value(category.getId());
+        jsonWriter.name("name");
+        jsonWriter.value(category.getName());
         jsonWriter.endObject();
     }
 
     @Override
-    public Trainee read(JsonReader jsonReader) throws IOException {
-        Trainee trainee = new Trainee(connection);
+    public Category read(JsonReader jsonReader) throws IOException {
+        Category category = new Category(connection);
         jsonReader.beginObject();
         String fieldname = null;
 
@@ -44,23 +41,18 @@ public class TraineeAdapter extends TypeAdapter<Trainee> {
 
             if("id".equals(fieldname)){
                 token = jsonReader.peek();
-                trainee.setId(jsonReader.nextLong());
+                category.setId(jsonReader.nextLong());
             }
 
-            if("firstName".equals(fieldname)) {
+            if("name".equals(fieldname)) {
                 token = jsonReader.peek();
-                trainee.setFirstName(jsonReader.nextString());
-            }
-
-            if("lastName".equals(fieldname)){
-                token = jsonReader.peek();
-                trainee.setLastName(jsonReader.nextString());
+                category.setName(jsonReader.nextString());
             }
 
 
 
         }
         jsonReader.endObject();
-        return trainee;
+        return category;
     }
 }
