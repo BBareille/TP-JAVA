@@ -90,7 +90,7 @@ public class Training extends DAL<Training> {
     public Category getCategory() throws SQLException {
         Category category = new Category();
 
-        String sql = "SELECT level.id, level.name from TRAINING LEFT JOIN level on ? = level.id";
+        String sql = "SELECT category.id, category.name from TRAINING LEFT JOIN category on ? = category.id";
         PreparedStatement statement = this.connection.getConnection().prepareStatement(sql);
         statement.setLong(1, category_id);
         ResultSet rs = statement.executeQuery();

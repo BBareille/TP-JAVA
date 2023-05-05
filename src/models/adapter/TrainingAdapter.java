@@ -35,10 +35,22 @@ public class TrainingAdapter extends TypeAdapter<Training> {
         jsonWriter.value(training.isOnline());
 
         try {
+
             jsonWriter.name("level");
-            jsonWriter.value(training.getLevel().getId());
+                jsonWriter.beginObject();
+                jsonWriter.name("id");
+                jsonWriter.value(training.getLevel().getId());
+                jsonWriter.name("name");
+                jsonWriter.value(training.getLevel().getName());
+            jsonWriter.endObject();
+
             jsonWriter.name("category");
-            jsonWriter.value(training.getCategory().getId());
+            jsonWriter.beginObject();
+                jsonWriter.name("id");
+                jsonWriter.value(training.getCategory().getId());
+                jsonWriter.name("name");
+                jsonWriter.value(training.getCategory().getName());
+            jsonWriter.endObject();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
