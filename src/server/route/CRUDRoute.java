@@ -86,6 +86,7 @@ public abstract class CRUDRoute implements HttpHandler {
             Gson gson = builder.create();
             String response = gson.toJson(modelList);
             exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
+            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.getResponseHeaders().add("Connection", "close");
             exchange.sendResponseHeaders(200, response.getBytes().length);
             OutputStream os = exchange.getResponseBody();
@@ -107,6 +108,7 @@ public abstract class CRUDRoute implements HttpHandler {
             newModel.create(newModel);
             String modelJson = gson.toJson(newModel);
 
+            exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
             exchange.sendResponseHeaders(200, modelJson.getBytes().length);
             OutputStream os = exchange.getResponseBody();
             os.write(modelJson.getBytes());
@@ -123,6 +125,7 @@ public abstract class CRUDRoute implements HttpHandler {
         String response = gson.toJson(targetModel);
         exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
         exchange.getResponseHeaders().add("Connection", "close");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         exchange.sendResponseHeaders(200, response.getBytes().length);
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes());
@@ -139,6 +142,7 @@ public abstract class CRUDRoute implements HttpHandler {
         newModel.update(newModel);
         String modelJson = gson.toJson(newModel);
 
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         exchange.sendResponseHeaders(200, modelJson.getBytes().length);
         OutputStream os = exchange.getResponseBody();
         os.write(modelJson.getBytes());
@@ -152,6 +156,7 @@ public abstract class CRUDRoute implements HttpHandler {
         Gson gson = builder.create();
         String response = gson.toJson(targetModel);
         exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
+        exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
         exchange.getResponseHeaders().add("Connection", "close");
         exchange.sendResponseHeaders(200, response.getBytes().length);
         OutputStream os = exchange.getResponseBody();
