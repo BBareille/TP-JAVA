@@ -37,6 +37,7 @@ public abstract class CRUDRoute implements HttpHandler {
         String method = exchange.getRequestMethod();
         String uriString = uri.toString();
         if(Objects.equals(uriString, "/"+route)){
+            System.out.println(method);
             if (method.matches("POST")) {
                 try {
                     post(exchange);
@@ -107,8 +108,9 @@ public abstract class CRUDRoute implements HttpHandler {
             DAL newModel = gson.fromJson(json, model.getClass());
             newModel.create(newModel);
             String modelJson = gson.toJson(newModel);
-
+            exchange.getResponseHeaders().set("Content-type", "application/json; charset=UTF-8");
             exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().add("Connection", "close");
             exchange.sendResponseHeaders(200, modelJson.getBytes().length);
             OutputStream os = exchange.getResponseBody();
             os.write(modelJson.getBytes());
@@ -143,6 +145,7 @@ public abstract class CRUDRoute implements HttpHandler {
         String modelJson = gson.toJson(newModel);
 
         exchange.getResponseHeaders().add("Access-Control-Allow-Origin", "*");
+        exchange.getResponseHeaders().add("Connection", "close");
         exchange.sendResponseHeaders(200, modelJson.getBytes().length);
         OutputStream os = exchange.getResponseBody();
         os.write(modelJson.getBytes());

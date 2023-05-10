@@ -2,7 +2,6 @@ package models;
 import DAL.DAL;
 import database.SqlConnection;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,7 +39,7 @@ public class Training extends DAL<Training> {
     }
 
     public void setStart_at(String start_at) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         this.start_at = formatter.parse(start_at);
     }
 
@@ -143,7 +142,7 @@ public class Training extends DAL<Training> {
 
         String sql = "SELECT former.id, firstName, lastName FROM TRAINING" +
                 "    LEFT JOIN training_former on ? = training_former.training_id" +
-                "    LEFT JOIN former on training_former.former_id = former.id";
+                "    LEFT JOIN former on training_former.former_id = former.id GROUP BY former.id, firstName, lastName";
 
 
 
@@ -175,5 +174,26 @@ public class Training extends DAL<Training> {
         String sql = "INSERT INTO training_trainee (training_id, trainee_id) VALUES "+ query;
         PreparedStatement statement = this.connection.getConnection().prepareStatement(sql);
         statement.executeUpdate();
+    }
+
+    public List<Trainee> getTrainee() throws SQLException {
+        List<Trainee> trainees = new ArrayList<>();
+
+        String sql = "SELECT trainee.id, firstName, lastName FROM TRAINING" +
+                "    LEFT JOIN training_trainee on ? = training_trainee.training_id" +
+                "    LEFT JOIN trainee on training_trainee.trainee_id = trainee.id GROUP BY trainee.id, firstName, lastName";
+
+        PreparedStatement statement  = this.connection.getConnection().prepareStatement(sql);
+        statement.setLong(1, this.id);
+        ResultSet rs = statement.executeQuery();
+        while(rs.next()){
+            Trainee trainee = new Trainee();
+            trainee.setId(rs.getLong("id"));
+            trainee.setFirstName(rs.getString("firstName"));
+            trainee.setLastName(rs.getString("lastName"));
+            trainees.add(trainee);
+        }
+        statement.close();
+        return trainees;
     }
 }

@@ -31,6 +31,9 @@ public class Trainee extends DAL<Trainee> {
     public Trainee(SqlConnection connection) {
         super(connection);
     }
+    public Trainee() {
+        super(null);
+    }
 
 
     @Override

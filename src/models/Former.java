@@ -40,10 +40,6 @@ public class Former extends DAL<Former> {
         this.lastName = lastName;
     }
 
-//    public void getFormationList(){
-
-//    }
-
     @Override
     public String toString() {
         return "Former{" +
