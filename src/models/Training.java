@@ -150,6 +150,8 @@ public class Training extends DAL<Training> {
         statement.setLong(1, this.id);
         ResultSet rs = statement.executeQuery();
         while(rs.next()){
+            if(rs.getLong("id") == 0)
+                break;
             Former former = new Former();
             former.setId(rs.getLong("id"));
             former.setFirstName(rs.getString("firstName"));
@@ -187,6 +189,8 @@ public class Training extends DAL<Training> {
         statement.setLong(1, this.id);
         ResultSet rs = statement.executeQuery();
         while(rs.next()){
+            if(rs.getLong("id") == 0)
+                break;
             Trainee trainee = new Trainee();
             trainee.setId(rs.getLong("id"));
             trainee.setFirstName(rs.getString("firstName"));
